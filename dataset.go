@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bufio"
+	"os"
 	"strings"
 )
 
@@ -19,6 +21,25 @@ func NewDataset(words []string) *Dataset {
 	return &Dataset{
 		words: newWords,
 	}
+}
+
+func NewDatasetFromFile(filename string) *Dataset {
+	f, err := os.OpenFile(filename, os.O_RDONLY, os.ModePerm)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	words := make([]string, 0)
+	sc := bufio.NewScanner(f)
+	for sc.Scan() {
+		words = append(words, sc.Text())
+	}
+	if err := sc.Err(); err != nil {
+		panic(err)
+	}
+
+	return NewDataset(words)
 }
 
 func (d *Dataset) Filter(word string, response []int) *Dataset {
@@ -49,4 +70,8 @@ func (d *Dataset) Filter(word string, response []int) *Dataset {
 	return &Dataset{
 		words: words,
 	}
+}
+
+func (d *Dataset) Len() int {
+	return len(d.words)
 }

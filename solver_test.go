@@ -43,7 +43,7 @@ func TestGetAttempt(t *testing.T) {
 	}} {
 		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
 			solver := NewFrequencyByPlaceSolver(NewDataset(testcase.words))
-			//solver.verbose = true
+			//solver.verbose = 2
 			assert.Equal(t, testcase.result, solver.GetAttempt())
 		})
 	}
