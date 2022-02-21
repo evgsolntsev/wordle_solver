@@ -60,13 +60,29 @@ func (d *Dataset) Len() int {
 }
 
 func CheckWord(word, attempt string, response []int) bool {
+	fixedResponse := make([]int, 5)
+	copy(fixedResponse, response)
+
+	existing := make(map[byte]bool)
+	for i, c := range response {
+		if c == WRONG_PLACE || c == CORRECT {
+			existing[attempt[i]] = true
+		}
+	}
+
+	for i, c := range response {
+		if c == NO_SYMBOL && existing[attempt[i]] {
+			fixedResponse[i] = WRONG_PLACE
+		}
+	}
+
 	result := true
 	for i := 0; i < WORD_LENGTH; i++ {
 		contains := strings.Contains(word, string(attempt[i]))
 		equal := word[i] == attempt[i]
 		suits := false
 
-		switch response[i] {
+		switch fixedResponse[i] {
 		case NO_SYMBOL:
 			suits = !contains
 		case WRONG_PLACE:
