@@ -28,3 +28,32 @@ func TestFilter(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckWord(t *testing.T) {
+	for i, testcase := range []struct {
+		word     string
+		attempt  string
+		response []int
+		result   bool
+	}{{
+		word:     "xaabd",
+		attempt:  "yyyyy",
+		response: []int{0, 0, 0, 0, 0},
+		result:   true,
+	}, {
+		word:     "abaca",
+		attempt:  "baaac",
+		response: []int{1, 1, 2, 1, 1},
+		result:   true,
+	}, {
+		word:     "offer",
+		attempt:  "order",
+		response: []int{2, 0, 0, 2, 2},
+		result:   true,
+	}} {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			assert.Equal(t, testcase.result, CheckWord(
+				testcase.word, testcase.attempt, testcase.response), testcase.result)
+		})
+	}
+}

@@ -43,28 +43,11 @@ func NewDatasetFromFile(filename string) *Dataset {
 }
 
 func (d *Dataset) Filter(word string, response []int) *Dataset {
-	words := make([]string, len(d.words))
-	copy(words, d.words)
-	for i := 0; i < WORD_LENGTH; i++ {
-		tmpWords := make([]string, 0, len(words))
-		for _, w := range words {
-			contains := strings.Contains(w, string(word[i]))
-			equal := w[i] == word[i]
-			suits := false
-
-			switch response[i] {
-			case NO_SYMBOL:
-				suits = !contains
-			case WRONG_PLACE:
-				suits = contains && !equal
-			case CORRECT:
-				suits = equal
-			}
-			if suits {
-				tmpWords = append(tmpWords, w)
-			}
+	var words []string
+	for _, w := range d.words {
+		if CheckWord(w, word, response) {
+			words = append(words, w)
 		}
-		words = tmpWords
 	}
 
 	return &Dataset{
@@ -74,4 +57,25 @@ func (d *Dataset) Filter(word string, response []int) *Dataset {
 
 func (d *Dataset) Len() int {
 	return len(d.words)
+}
+
+func CheckWord(word, attempt string, response []int) bool {
+	result := true
+	for i := 0; i < WORD_LENGTH; i++ {
+		contains := strings.Contains(word, string(attempt[i]))
+		equal := word[i] == attempt[i]
+		suits := false
+
+		switch response[i] {
+		case NO_SYMBOL:
+			suits = !contains
+		case WRONG_PLACE:
+			suits = contains && !equal
+		case CORRECT:
+			suits = equal
+		}
+
+		result = result && suits
+	}
+	return result
 }
