@@ -57,3 +57,24 @@ func TestCheckWord(t *testing.T) {
 		})
 	}
 }
+
+func TestGenerateResponse(t *testing.T) {
+	for i, testcase := range []struct {
+		word     string
+		attempt  string
+		response []int
+	}{{
+		word:     "halve",
+		attempt:  "sores",
+		response: []int{0, 0, 0, 1, 0},
+	}, {
+		word:     "rooms",
+		attempt:  "spite",
+		response: []int{1, 0, 0, 0, 0},
+	}} {
+		t.Run(fmt.Sprintf("%d", i), func(t *testing.T) {
+			assert.Equal(t, testcase.response, GenerateResponse(testcase.word, testcase.attempt))
+		})
+	}
+
+}

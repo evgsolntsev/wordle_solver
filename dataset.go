@@ -59,6 +59,12 @@ func (d *Dataset) Len() int {
 	return len(d.words)
 }
 
+func (d *Dataset) Copy() *Dataset {
+	newWords := make([]string, len(d.words))
+	copy(newWords, d.words)
+	return NewDataset(newWords)
+}
+
 func CheckWord(word, attempt string, response []int) bool {
 	fixedResponse := make([]int, 5)
 	copy(fixedResponse, response)
@@ -93,5 +99,20 @@ func CheckWord(word, attempt string, response []int) bool {
 
 		result = result && suits
 	}
+	return result
+}
+
+func GenerateResponse(word, attempt string) []int {
+	result := make([]int, 5)
+	for i, _ := range attempt {
+		if attempt[i] == word[i] {
+			result[i] = CORRECT
+		} else if strings.Contains(word, string(attempt[i])) {
+			result[i] = WRONG_PLACE
+		} else {
+			result[i] = NO_SYMBOL
+		}
+	}
+
 	return result
 }
