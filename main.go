@@ -161,7 +161,7 @@ func check(dataset *Dataset, solver Solver) {
 
 func init() {
 	rand.Seed(time.Now().UnixNano())
-	flag.StringVar(&datasetFilename, "dataset", "dataset.txt", "Dataset filename")
+	flag.StringVar(&datasetFilename, "dataset", "datasets/dataset.txt", "Dataset filename")
 	flag.StringVar(&mode, "mode", "i", "Work mode")
 	flag.StringVar(&solverType, "solver", FREQUENCY_BY_PLACE_SOLVER, "Solver")
 	flag.BoolVar(&verbose, "v", false, "Verbose logging")
